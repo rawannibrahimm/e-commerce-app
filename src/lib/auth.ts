@@ -18,6 +18,7 @@ export async function getUserToken(){
     const encodedToken = (await cookies()).get("next-auth.session-token")?.value || (await cookies()).get("__Secure-next-auth.session-token")?.value
     // Verifies JWT , Decodes payload , Returns object
     const token = await decode({token: encodedToken, secret: process.env.AUTH_SECRET!})
+    console.log(token?.token)
     // Give me backend token securely on server
     // The token returns an object of things like sub, user object, token and so on , we want the token only right now
     return token?.token as string
