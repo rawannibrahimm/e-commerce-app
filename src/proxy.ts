@@ -9,18 +9,33 @@ export async function proxy(request: NextRequest) {
     // It does NOT return your original backend token automatically 
     // And that the importance of storing it inside the NextAuth JWT (we already did that)
     // It Reads the NextAuth session token, then Decodes it, then Returns its payload
-    const token = await getToken({req: request})
-    const {pathname} = request.nextUrl
-    const authPages = pathname == "/login" || pathname == "/register"
-    if(token && authPages){
-        return NextResponse.redirect(new URL("/", request.url))
-    }
-    if(!token && !authPages){
-        return NextResponse.redirect(new URL("/login", request.url))
-    }
-    return NextResponse.next()
-}
-// See "Matching Paths" below to learn more
+    const token = await getToken({
+    req: request,
+    secret: process.env.AUTH_SECRET,
+  })
+
+  const { pathname } = request.nextUrl
+  const authPages = ["/login", "/register"].includes(pathname)
+
+  // If logged in → prevent login/register
+  if (token && authPages) {
+    return NextResponse.redirect(new URL("/", request.url))
+  }
+
+  // If not logged → protect pages
+  if (!token && !authPages) {
+    return NextResponse.redirect(new URL("/login", request.url))
+  }
+
+  return NextResponse.next()
+}// See "Matching Paths" below to learn more
 export const config = {
-    matcher: ["/userCart","/brands","/categories","/login","/register","/userWhishlist"],
+  matcher: [
+    "/userCart/:path*",
+    "/brands/:path*",
+    "/categories/:path*",
+    "/userWhishlist/:path*",
+    "/login",
+    "/register",
+  ],
 }
