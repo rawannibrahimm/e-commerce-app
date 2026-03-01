@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
             authorize: async (credentials) => {
                 if (!credentials) return null
                 const data = await signInUser(credentials)
-                console.log(data)
+                // console.log(data)
                 if (data.message == "success") {
                     const decodedToken : decodedTokenI = jwtDecode(data.token)
                     return{

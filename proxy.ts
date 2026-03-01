@@ -11,7 +11,7 @@ export async function proxy(request: NextRequest) {
     // It Reads the NextAuth session token, then Decodes it, then Returns its payload
     const token = await getToken({
     req: request,
-    secret: process.env.AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
   })
 
   const { pathname } = request.nextUrl
