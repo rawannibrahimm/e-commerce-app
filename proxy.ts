@@ -14,8 +14,8 @@ export async function proxy(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   })
 
-  const { pathname } = request.nextUrl
-  const authPages = ["/login", "/register"].includes(pathname)
+  const { pathname } = (request.nextUrl)
+  const authPages = pathname == "/login" || pathname == "/register"
 
   // If logged in → prevent login/register
   if (token && authPages) {
