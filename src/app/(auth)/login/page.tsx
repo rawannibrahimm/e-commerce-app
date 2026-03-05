@@ -46,6 +46,7 @@ export default function Login() {
         })
         if(response?.ok){
             toast.success("Signed-In Successfully")
+            router.refresh()
             router.replace("/") 
         } else {
             toast.error(response?.error)
