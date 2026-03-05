@@ -5,6 +5,7 @@ import CartTable from "@/components/userCart/cartTable";
 import OrderSummary from "@/components/userCart/orderSummary";
 import useGetCart from "@/hooks/useCart";
 import { ShoppingBasket } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function UserCart() {
 
@@ -17,8 +18,8 @@ export default function UserCart() {
   //   getUserCart()
   // }, [])
   
-
-  const { data, isLoading, isFetching } = useGetCart();
+  const { status } = useSession()
+  const { data, isLoading, isFetching } = useGetCart(status === "authenticated");
   const products = data?.data?.products ?? [];
   const hasProducts = products.length > 0;
 

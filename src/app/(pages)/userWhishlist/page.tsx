@@ -5,9 +5,11 @@ import WhishlistTable from '@/components/userWhishlist/whishlistTable';
 import useGetWhishlist from '@/hooks/useWhishlist'
 import FeaturesBar from "@/components/common/featuresbar"
 import { Heart } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 export default function UserWhishlist() {
-    const {data, isLoading, isFetching} = useGetWhishlist()
+    const { status } = useSession()
+    const {data, isLoading, isFetching} = useGetWhishlist(status === "authenticated")
     // console.log(data)
     const products = data?.data?? [];
     const hasProducts = products.length > 0;

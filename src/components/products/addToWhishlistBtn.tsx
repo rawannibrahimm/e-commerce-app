@@ -7,11 +7,13 @@ import { toast } from "sonner";
 import { Spinner } from "../ui/spinner"; 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useGetWhishlist from "@/hooks/useWhishlist";
+import { useSession } from "next-auth/react";
 
 export default function AddToWhishlistBtn({ product }: { product: ProductI }) {
     // const [isLoading, setIsLoading] = useState(false);
     // const [isWishlisted, setIsWishlisted] = useState(false);
-    const { data: wishlist } = useGetWhishlist()
+    const { status } = useSession()
+    const { data: wishlist } = useGetWhishlist(status === "authenticated")
     const isWishlisted = wishlist?.data?.some(
         (item: ProductI) => item._id === product._id
     )
