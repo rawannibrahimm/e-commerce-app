@@ -9,14 +9,17 @@ import useGetCart from '@/hooks/useCart'
 import { Badge } from '../ui/badge'
 import { CartProductI } from '@/interfaces/cart'
 import useGetWhishlist from '@/hooks/useWhishlist'
+import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 // import { getServerSession } from 'next-auth'
 // import { authOptions } from '@/lib/authOptions'
 
 export default function Navbar() {
+    const queryClient = useQueryClient()
     // const sessionData = await getServerSession(authOptions)
     const { data: session, status } = useSession()
-    const { data } = useGetCart();
-    const { data: whishlist } = useGetWhishlist()
+    const { data } = useGetCart(status === "authenticated");
+    const { data: whishlist } = useGetWhishlist(status === "authenticated")
     const totalItems = data?.data?.products?.reduce((accu:number, product:CartProductI)=> product.count + accu, 0)
     const whishlistCount = whishlist?.count
     function logOutUser (){
@@ -24,6 +27,13 @@ export default function Navbar() {
             callbackUrl: "/login"
         })
     }
+    // To work after the user logs in , depends only on changing status
+    useEffect(()=>{
+        if(status === "authenticated"){
+            queryClient.invalidateQueries({queryKey:["cart"]})
+            queryClient.invalidateQueries({queryKey:["whishlist"]})
+        }
+        },[status])
     return (
         <>
             <nav className='p-5' >
