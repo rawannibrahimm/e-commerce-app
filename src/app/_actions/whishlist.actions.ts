@@ -7,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_BASE_URL
 export async function addToWhishlist(productId: string) {
     const token = await getUserToken()
     if(!token){
-        throw new Error("You are not logged In. Please login to get access.")
+        throw new Error("You are not logged In. Please log-In First!")
     }
     
     const response = await fetch(`${API_URL}/wishlist`, {

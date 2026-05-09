@@ -7,11 +7,12 @@ import { ProductI } from '@/interfaces/products'
 import { toast } from 'sonner'
 import { Spinner } from '../ui/spinner'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 
 export default function AddToCartBtn({ product }: { product: ProductI }) {
 
     const queryClient = useQueryClient()
-
+    const { status } = useSession()
     const { mutate, isPending } = useMutation({
         mutationFn: addToCart,
         onSuccess: (response) => {
@@ -28,7 +29,14 @@ export default function AddToCartBtn({ product }: { product: ProductI }) {
     return (
         <Button
             disabled={isPending}
-            onClick={() => mutate(product._id)}
+            // onClick={() => mutate(product._id)}
+            onClick={() => {
+            if (status !== "authenticated") {
+                toast.error("You are not logged In. Please log-In First!")
+                return
+                }
+                mutate(product._id)
+            }}
             className="w-10/12 bg-[#2a5631] hover:bg-[#16371b] cursor-pointer"
         >
             {isPending ? <Spinner /> : <>Add to cart <ShoppingCart /></>}

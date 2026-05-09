@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_BASE_URL
 export async function addToCart(productId: string) {
     const token = await getUserToken()
     if(!token){
-        throw new Error("You are not logged in. Please login to get access")
+        throw new Error("You are not logged In. Please log-In First!")
     }
     
     const response = await fetch(`${API_URL}/cart`, {
