@@ -57,10 +57,26 @@ export default function AddToWhishlistBtn({ product }: { product: ProductI }) {
     return (
     <>
     <div className="flex items-center justify-center w-7 h-7">
-        {isPending ? (<Spinner className="w-5 h-5" />) : (
-        <Heart onClick={() => mutate(product._id)} size={28} className={`transition cursor-pointer 
-            ${isWishlisted ? "fill-red-600/80 text-red-600/80 pointer-events-none" : ""}`}
-        />)}
+        {isPending ? (<Spinner className="w-5 h-5" />) : 
+        (
+        // <Heart onClick={() => mutate(product._id)} 
+        // size={28} className={`transition cursor-pointer 
+        //                         ${isWishlisted ? "fill-red-600/80 text-red-600/80 pointer-events-none" : ""}`
+        //                     }
+        // />
+        <Heart onClick={() => {
+            if (status !== "authenticated") {
+                toast.error("You are not logged In. Please log-In First!")
+                return
+                }
+                mutate(product._id)
+        }} 
+        size={28} className={`transition cursor-pointer 
+                                ${isWishlisted ? "fill-red-600/80 text-red-600/80 pointer-events-none" : ""}`
+                            }
+        />
+        )
+        }
     </div>
     </>
     );
